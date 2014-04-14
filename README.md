@@ -1,9 +1,9 @@
-basic-nginx cookbook
-====================
+nginx cookbook
+==============
 
-This Chef cookbook installs nginx.
+This Chef cookbook installs nginx on CentOS 6.5
 
-This basic-nginx cookbook has very limited configurability and likely you'll want to use
+This nginx cookbook has very limited configurability and likely you'll want to use
 the a community nginx cookbook for your deployments instead.
 
 Personally I find the community cookbooks too complicated; this cookbook is tailored to meet
