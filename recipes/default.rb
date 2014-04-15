@@ -43,24 +43,41 @@ package 'nginx'
 # Create directories
 #
 
-directories = [File.dirname(node['nginx']['conf']['error_log']),
-               File.dirname(node['nginx']['conf_file']),
+directories = [File.dirname(node['nginx']['conf_file']),
                node['nginx']['conf']['conf.d'],
                node['nginx']['conf']['sites_enabled']]
 directories.each do |dir|
   directory dir do
     action :create
     recursive true
-    owner node['nginx']['user']
-    group node['nginx']['group']
+    owner 'root'
+    group 'root'
     mode '0755'
   end
 end
 
-file node['nginx']['conf']['error_log'] do
+directory File.dirname(node['nginx']['conf']['error_log']) do
+  action :create
+  recursive true
   owner node['nginx']['user']
   group node['nginx']['group']
-  mode '0644'
+  mode '0755'
+end
+
+files = [node['nginx']['conf']['error_log']]
+files.each do |logfile|
+  file logfile do
+    owner node['nginx']['user']
+    group node['nginx']['group']
+    mode '0755'
+    action :create_if_missing
+  end
+end
+
+file node['nginx']['conf']['pid_file'] do
+  owner 'root'
+  group 'root'
+  mode '0755'
   action :create_if_missing
 end
 
@@ -69,18 +86,21 @@ end
 #
 
 template '/etc/init/nginx.conf' do
+  owner 'root'
+  group 'root'
   mode '0644'
   source 'init.nginx.conf.erb'
 end
 
 template node['nginx']['conf_file'] do
+  owner 'root'
+  group 'root'
   mode '0644'
-  owner node['nginx']['user']
-  group node['nginx']['group']
   source 'nginx.conf.erb'
 end
 
 service 'nginx' do
   provider Chef::Provider::Service::Upstart
-  action [:enable, :start]
+  supports :status => true, :restart => true, :reload => true
+  action :enable
 end
