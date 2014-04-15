@@ -4,7 +4,7 @@ default['nginx']['group'] = 'nginx'
 default['nginx']['gid'] = nil # set to nil to let system pick
 default['nginx']['version'] = '1.4.7'
 default['nginx']['url'] = 'http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm'
-
+default['nginx']['keep_default_conf'] = false
 default['nginx']['binary'] = '/usr/sbin/nginx'
 default['nginx']['dir'] = '/etc/nginx'
 default['nginx']['log_dir'] = '/var/log/nginx'
